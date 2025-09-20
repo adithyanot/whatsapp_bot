@@ -110,7 +110,7 @@ function handleNotes(userId, userMessage) {
 function handleMood(userId, userMessage) {
   if (!userMoods[userId]) userMoods[userId] = [];
 
-  if (userMessage.toLowerCase().startsWith("mood")) {
+  if (userMessage.toLowerCase().includes("mood")) {
     const moodText = userMessage.replace(/mood/i, "").trim();
     const entry = { mood: moodText, time: new Date().toLocaleString() };
     userMoods[userId].push(entry);
