@@ -110,7 +110,15 @@ function handleNotes(userId, userMessage) {
 function handleMood(userId, userMessage) {
   if (!userMoods[userId]) userMoods[userId] = [];
 
-  if (userMessage.toLowerCase().includes("mood")) {
+  if (userMessage.toLowerCase().includes("show mood")) {
+    if (userMoods[userId].length === 0) return "📭 No mood logs yet.";
+    return (
+      "🧘 Your mood log:\n" +
+      userMoods[userId]
+        .map((m, i) => `${i + 1}. [${m.time}] ${m.mood}`)
+        .join("\n")
+    );
+  }else if(userMessage.toLowerCase().includes("mood")){
     const moodText = userMessage.replace(/mood/i, "").trim();
     const entry = { mood: moodText, time: new Date().toLocaleString() };
     userMoods[userId].push(entry);
@@ -119,14 +127,7 @@ function handleMood(userId, userMessage) {
     fs.appendFileSync("moods.txt", JSON.stringify({ userId, ...entry }) + "\n");
 
     return `💖 Mood logged: "${moodText}"`;
-  } else if (userMessage.toLowerCase().includes("show mood")) {
-    if (userMoods[userId].length === 0) return "📭 No mood logs yet.";
-    return (
-      "🧘 Your mood log:\n" +
-      userMoods[userId]
-        .map((m, i) => `${i + 1}. [${m.time}] ${m.mood}`)
-        .join("\n")
-    );
+
   }
 
   return null;
